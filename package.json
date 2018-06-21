@@ -4,8 +4,12 @@
   "description": "ZagTrader API microservice",
   "main": "app.js",
   "scripts": {
+    "start": "node dist/app.js",
+    "build": "rimraf dist && cross-env NODE_ENV=production babel . -d dist --ignore ./node_modules -s",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix src && prettier --write \"**/*.js\" \"!dist/**/*.js\"",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -28,17 +32,48 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-plugin-source-map-support": "^2.0.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "cross-env": "^5.2.0",
-    "nodemon": "^1.17.5"
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "lint-staged": "^7.2.0",
+    "nodemon": "^1.17.5",
+    "prettier": "^1.13.5",
+    "rimraf": "^2.6.2"
   },
   "nodemonConfig": {
     "execMap": {
       "js": "babel-node"
     }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "tabWidth": 2,
+    "useTabs": false
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": [
+      "standard",
+      "prettier"
+    ]
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
   },
   "babel": {
     "sourceMaps": "both",
