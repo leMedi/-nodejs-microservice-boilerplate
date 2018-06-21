@@ -4,6 +4,7 @@
   "description": "ZagTrader API microservice",
   "main": "app.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +19,52 @@
   ],
   "author": "Mehdi ElHaij",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/finamaze/zagtrader#readme"
+  "homepage": "https://bitbucket.org/finamaze/zagtrader#readme",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "keyblade": "^0.3.2",
+    "koa": "^2.5.1",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-source-map-support": "^2.0.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.2.0",
+    "nodemon": "^1.17.5"
+  },
+  "nodemonConfig": {
+    "execMap": {
+      "js": "babel-node"
+    }
+  },
+  "babel": {
+    "sourceMaps": "both",
+    "plugins": [
+      "transform-runtime",
+      "transform-object-rest-spread"
+    ],
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ],
+    "env": {
+      "production": {
+        "plugins": [
+          "source-map-support"
+        ],
+        "ignore": [
+          "**/__tests__/**"
+        ]
+      }
+    }
+  }
 }
