@@ -25,6 +25,9 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/finamaze/zagtrader#readme",
   "dependencies": {
+    "awilix": "^3.0.8",
+    "awilix-koa": "^2.1.1",
+    "awilix-router-core": "^1.3.2",
     "dotenv": "^6.0.0",
     "keyblade": "^0.3.2",
     "koa": "^2.5.1",
