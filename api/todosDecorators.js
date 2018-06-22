@@ -20,6 +20,6 @@ export default class todosAPI {
 
   @POST()
   async createTodo(ctx) {
-    ctx.body = await this.todoService.add('new task')
+    ctx.body = await this.todoService.add(ctx.request.body)
   }
 }

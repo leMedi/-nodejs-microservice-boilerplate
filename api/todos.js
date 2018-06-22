@@ -4,7 +4,7 @@ const api = ({ todoService }) => ({
   index: async ctx => (ctx.body = await todoService.all()),
   hello: async ctx => (ctx.body = 'hello world'),
   get: async ctx => (ctx.body = await todoService.get(ctx.params.id)),
-  new: async ctx => (ctx.body = await todoService.add('new task'))
+  new: async ctx => (ctx.body = await todoService.add(ctx.request.body))
 })
 
 export default createController(api)

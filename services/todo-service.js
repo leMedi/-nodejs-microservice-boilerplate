@@ -1,3 +1,7 @@
+import { NotFound, BadRequest } from 'fejl'
+
+const assertId = BadRequest.makeAssert('No id given')
+
 /**
  * Todo Service.
  * Gets a todo store injected.
@@ -12,12 +16,16 @@ export default class TodoService {
   }
 
   async get(id) {
-    return this.todoStore.get(id)
+    assertId(id)
+    return this.todoStore
+      .get(id)
+      .then(NotFound.makeAssert(`Todo with id "${id}" not found`))
   }
 
-  async add(name) {
-    return this.todoStore.add({
-      name
-    })
+  async add(data) {
+    BadRequest.assert(data, 'No todo payload given')
+    BadRequest.assert(data.name, 'name is required')
+    BadRequest.assert(data.name.length < 100, 'name is too long')
+    return this.todoStore.add(data)
   }
 }
