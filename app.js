@@ -9,7 +9,11 @@ createServer().then(
       logger.info(`Server listening on ${env.PORT} in ${mode} mode`)
     }),
   err => {
-    logger.error('Error while starting up server', err)
+    logger.error('Error while starting up server', {
+      name: err.name,
+      message: err.message,
+      stack: err.stack
+    })
     process.exit(1)
   }
 )
