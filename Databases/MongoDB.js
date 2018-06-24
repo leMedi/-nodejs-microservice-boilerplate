@@ -4,9 +4,7 @@ import { logger } from '../lib/logger'
 
 const connectToDB = async () => {
   try {
-    mongoose.connect(
-      `mongodb://${env.MONGO_HOST}:${env.MONGO_PORT}/${env.MONGO_DB_NAME}`
-    )
+    mongoose.connect(`mongodb://${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`)
     logger.info('Connected to mongo!!!')
   } catch (err) {
     console.log(err)
