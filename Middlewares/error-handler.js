@@ -16,6 +16,7 @@ export async function errorHandler(ctx, next) {
     if (!env.EMIT_STACK_TRACE) {
       delete ctx.body.stack
     }
+    console.log(err)
     logger.error('Error in request', err)
   }
 }
