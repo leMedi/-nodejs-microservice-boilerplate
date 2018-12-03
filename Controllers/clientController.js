@@ -1,97 +1,67 @@
-import { NotFound, BadRequest } from 'fejl'
+import { BadRequest, NotFound } from 'fejl'
 
 import { Client } from '../Models/ClientModel'
-import { Counters } from '../Models/CounterCollection'
 
 /**
  * Client Controller.
  */
 export default class clientController {
-  constructor({ zagTrader }) {
-    this.zagTrader = zagTrader
+  constructor({ logger }) {
+    this.logger = logger
   }
 
   async all() {
-    return Client.find({}, 'name')
+    return Client.find({})
   }
 
   async get(id) {
     BadRequest.assert(id)
+
+    this.logger.debug(`Get Client by id=${id}`)
+
     return Client.findById(id).then(
       NotFound.makeAssert(`Client with id "${id}" not found`)
     )
   }
 
-  async create({ id, name, email, mobile, birthDay }) {
+  async create({ name, email }) {
     // validate info
-    BadRequest.assert(id, 'id is required')
     BadRequest.assert(name, 'name is required')
     BadRequest.assert(email, 'email is required')
-    BadRequest.assert(mobile, 'mobile is required')
-    BadRequest.assert(birthDay, 'birthDay is required')
 
     try {
-      // generate id
-      const _id = await Counters.getNext('clientid')
-
-      // talk to zagtrader
-      await this.zagTrader.createClient({
-        id: _id,
+      this.logger.debug('New Client', {
         name,
-        email,
-        mobile,
-        birthDay
+        email
       })
 
       // save to db
       let client = new Client({
-        _id: id,
         name,
-        email,
-        mobile,
-        birthDay,
-        zagId: _id
+        email
       })
 
       await client.save()
 
+      this.logger.info('Client Created', client.toObject())
+
       return client
     } catch (error) {
       // TODO: report failure
-      // if(error instanceof ZagValidationError){
 
-      // }else if(error instanceof ZagValidationError) {
+      this.logger.error('New Client Error', {
+        client: { name, email },
+        message: error.message
+      })
 
-      // }
       throw error
     }
   }
 
-  async deposit(id, amount) {
-    // validate info
-    BadRequest.assert(id, 'id is required')
-    BadRequest.assert(amount, 'amount is required')
-
-    // find client
-    let client = await Client.findById(id).then(
+  async deleteById(id) {
+    BadRequest.assert(id)
+    return Client.findByIdAndDelete(id).then(
       NotFound.makeAssert(`Client with id "${id}" not found`)
     )
-
-    try {
-      // talk to zagtrader
-      await this.zagTrader.clientCashDeposit(client.zagId, amount)
-
-      return {
-        message: 'done'
-      }
-    } catch (error) {
-      // TODO: report failure
-      // if(error instanceof ZagValidationError){
-
-      // }else if(error instanceof ZagValidationError) {
-
-      // }
-      throw error
-    }
   }
 }

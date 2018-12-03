@@ -1,4 +1,4 @@
-import { route, GET, POST } from 'awilix-koa' // or `awilix-router-core`
+import { route, GET, POST, DELETE } from 'awilix-koa' // or `awilix-router-core`
 
 @route('/clients')
 export default class tickersAPI {
@@ -12,24 +12,21 @@ export default class tickersAPI {
     ctx.body = await this.clientController.all()
   }
 
+  @route('/:id')
+  @GET()
+  async get(ctx) {
+    ctx.body = await this.clientController.get(ctx.params.id)
+  }
+
   @route('')
   @POST()
   async create(ctx) {
     ctx.body = await this.clientController.create(ctx.request.body)
   }
 
-  @route('/:id/deposit')
-  @POST()
-  async deposit(ctx) {
-    ctx.body = await this.clientController.deposit(
-      ctx.params.id,
-      ctx.request.body.amount || null
-    )
-  }
-
   @route('/:id')
-  @GET()
-  async get(ctx) {
-    ctx.body = await this.clientController.get(ctx.params.id)
+  @DELETE()
+  async remove(ctx) {
+    ctx.body = await this.clientController.deleteById(ctx.params.id)
   }
 }
